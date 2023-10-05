@@ -7,7 +7,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.UUID,
       },
-      fullname: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
@@ -16,26 +16,14 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      role: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       phone: {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
-      },
-      type: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      address: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      region: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      gender: {
-        type: Sequelize.STRING,
-        allowNull: false,
       },
       password: {
         type: Sequelize.STRING,
@@ -49,9 +37,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      destroyTime: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('Users');
   },
 };

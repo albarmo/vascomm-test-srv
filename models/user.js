@@ -4,20 +4,13 @@ const { v4: uuidv4 } = require('uuid');
 const { hashPassword } = require('../helpers/bcrypt');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {
-      User.hasMany(models.Cart, {
-        sourceKey: 'id',
-        foreignKey: 'UserId',
-      });
-      User.hasMany(models.Wishlist, {
-        sourceKey: 'id',
-        foreignKey: 'UserId',
-      });
+    static associate() {
+     // define relation 
     }
   }
   User.init(
     {
-      fullname: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -55,39 +48,9 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      type: {
+      role: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      address: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'User address cannot be empty',
-          },
-        },
-      },
-      region: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'User region cannot be empty',
-          },
-        },
-      },
-      gender: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'User gender cannot be empty',
-          },
-        },
       },
       password: {
         type: DataTypes.STRING,
@@ -109,13 +72,15 @@ module.exports = (sequelize, DataTypes) => {
         beforeCreate(instance) {
           instance.id = uuidv4();
           instance.password = hashPassword(instance.password);
-          instance.type = 'customer';
+          instance.role = 'customer';
         },
         beforeUpdate(instance) {
           instance.password = hashPassword(instance.password);
         },
       },
       sequelize,
+      paranoid: true,
+      deletedAt: 'destroyTime',
       modelName: 'User',
     }
   );

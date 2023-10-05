@@ -1,24 +1,22 @@
 function errorHandler(err, req, res, next) {
   let msg = '';
   let code = '';
-
+  const errors = []
+  
   switch (err.name) {
     case 'SequelizeValidationError':
-      let errors = [];
       err.errors.forEach((el) => {
         errors.push(el.message);
       });
       code = 400;
       msg = `${errors}`;
       break;
-
     case 'SequelizeUniqueConstraintError':
-      let errors2 = [];
       err.errors.forEach((el) => {
-        errors2.push(el.message);
+        errors.push(el.message);
       });
       code = 400;
-      msg = `${errors2}`;
+      msg = `Not Unique! ${errors}`;
       break;
 
     case 'Wrong Email or Password':
@@ -39,10 +37,11 @@ function errorHandler(err, req, res, next) {
     default:
       code = 500;
       msg = err.message;
+      next()
       break;
   }
 
-  return res.status(code).json({ msg });
+  return res.status(code).json({code, msg, data: err });
 }
 
 module.exports = errorHandler;

@@ -1,4 +1,4 @@
-name: Magin Server Linting & Testing 
+name: Server Linting & Testing 
 on:
   push:
     branches:

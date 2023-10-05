@@ -12,35 +12,16 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      CollectionId: {
-        type: Sequelize.UUID,
-      },
-      color: {
-        type: Sequelize.STRING,
+      status: {
+        type: Sequelize.BOOLEAN,
         allowNull: false,
       },
-      size: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      stock: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      images: {
+      image: {
         type: Sequelize.STRING,
         allowNull: false,
       },
       price: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      weight: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
       createdAt: {
@@ -51,9 +32,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      destroyTime: {
+        allowNull: true,
+        type: Sequelize.DATE,
+      }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('Products');
   },
 };

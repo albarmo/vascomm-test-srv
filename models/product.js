@@ -3,19 +3,8 @@ const { Model } = require('sequelize');
 const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    static associate(models) {
-      Product.belongsTo(models.Collection, {
-        targetKey: 'id',
-        foreignKey: 'CollectionId',
-      });
-      Product.hasMany(models.Cart, {
-        sourceKey: 'id',
-        foreignKey: 'ProductId',
-      });
-      Product.hasMany(models.Wishlist, {
-        sourceKey: 'id',
-        foreignKey: 'ProductId',
-      });
+    static associate() {
+      //
     }
   }
   Product.init(
@@ -34,56 +23,10 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      CollectionId: DataTypes.UUID,
-      color: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Product colors name cannot be empty',
-          },
-        },
+      status: {
+        type: DataTypes.BOOLEAN,
       },
-      size: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Product size cannot be empty',
-          },
-        },
-      },
-      description: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Product description cannot be empty',
-          },
-          len: {
-            args: [20, 500],
-            msg: 'Minimum character of product description is more than 20 and less than 500',
-          },
-        },
-      },
-      stock: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Input stock cannot be empty',
-          },
-          min: {
-            args: [0],
-            msg: 'Stock cannot be less than zero',
-          },
-        },
-      },
-      images: {
+      image: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
@@ -107,16 +50,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      weight: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'Product weight cannot be empty',
-          },
-        },
-      },
     },
     {
       hooks: {
@@ -125,6 +58,8 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       sequelize,
+      paranoid: true,
+      deletedAt: 'destroyTime',
       modelName: 'Product',
     }
   );

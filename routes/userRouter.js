@@ -7,6 +7,7 @@ userRouter.post('/login', UserController.login);
 
 userRouter.use(authentification);
 userRouter.put('/:id', UserController.updateUser);
+userRouter.get('/me', UserController.getCurrentUser);
 
 userRouter.use(authorization);
 userRouter.get('/', UserController.list);

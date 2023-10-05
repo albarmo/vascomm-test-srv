@@ -3,20 +3,27 @@
 const { hashPassword } = require('../helpers/bcrypt');
 const { v4: uuidv4 } = require('uuid');
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     await queryInterface.bulkInsert(
       'Users',
       [
         {
           id: uuidv4(),
-          fullname: 'Superadmin Plagams',
-          email: 'administrator@plagams.store',
+          name: 'Admin App',
+          email: 'admin@vascomm.id',
           phone: '085692495134',
-          address: '403 George Ave.Shakopee, MN 55379',
-          region: 'Indonesia',
-          gender: 'male',
-          password: hashPassword('PlagaMS2023!'),
-          type: 'admin',
+          role:'admin',
+          password: hashPassword( 'Vascomm2023!' ),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+         {
+          id: uuidv4(),
+          name: 'Albar Moerhamsa',
+          email: 'moerhamsa@gmail.com',
+           phone: '085692495133',
+          role:'customer',
+          password: hashPassword( 'Vascomm2023!' ),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -25,7 +32,7 @@ module.exports = {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     await queryInterface.bulkDelete('Users', null, {});
   },
 };

@@ -15,7 +15,7 @@ function authentification(req, res, next) {
 function authorization(req, res, next) {
   User.findByPk(req.userData.id)
     .then((user) => {
-      if (user.type == 'admin') {
+      if (user.role == 'admin') {
         next();
       } else {
         next({ name: 'Not Authorized' });

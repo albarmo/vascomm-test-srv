@@ -2,14 +2,14 @@
   "development": {
     "username": "postgres",
     "password": "postgres",
-    "database": "dev-plagams-srv",
+    "database": "dev-vascomm-srv",
     "host": "127.0.0.1",
     "dialect": "postgres"
   },
   "test": {
     "username": "root",
     "password": null,
-    "database": "test-plagams-srv",
+    "database": "test-vascomm-srv",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },

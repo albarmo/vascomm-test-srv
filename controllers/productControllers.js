@@ -1,29 +1,32 @@
-const { Product, Collection, Categorie } = require('../models');
+const {Product} = require( '../models' );
 const { Op } = require('sequelize');
-const uploader = require('../helpers/uploader');
+const uploader = require( '../helpers/uploader' );
 
-class ProductController {
-  static async list(req, res, next) {
+class ProductController
+{
+  static async list( req, res, next ){
+    const {limit, keyword, status, offset} = req.query
+    
+    let params = {}
+    if (status) {
+      params ={status}
+    }
+
+    if ( keyword ) {
+      params.title = {[Op.like]: `%${keyword}%`}
+    }
+
     try {
       const data = await Product.findAll({
-        include: {
-          model: Collection,
-          attributes: ['id', 'title'],
-          include: {
-            model: Categorie,
-            attributes: ['id', 'title'],
-          },
-        },
         where: {
-          stock: {
-            [Op.gt]: 0,
-          },
+         ...params
         },
-
-        order: [['title', 'ASC']],
+        limit: limit || 10,
+        offset: offset || 0,
+        order: [['createdAt', 'ASC']],
       });
       if (data) {
-        return res.status(200).json({ data });
+        return res.status(200).json({code:'200', message:'OK', data });
       }
     } catch (error) {
       next(error);
@@ -32,29 +35,24 @@ class ProductController {
 
   static create(req, res, next) {
     try {
-      const upload = uploader('PRODUCT_IMAGE').fields([{ name: 'images' }]);
+      const upload = uploader('PRODUCT_IMAGE').fields([{ name: 'image' }]);
       upload(req, res, (err) => {
         if (err) {
           return res.status(500).json({ msg: err });
         }
-        const { images } = req.files;
-        const imagePath = images ? '/' + images[0].filename : null;
+        const { image } = req.files;
+        const imagePath = image ? '/' + image[0].filename : null;
 
         let inputData = {
           title: req.body.title,
-          color: req.body.color,
-          size: req.body.size,
-          description: req.body.description,
-          stock: req.body.stock,
-          images: imagePath,
+          status: req.body.status,
+          image: imagePath,
           price: req.body.price,
-          weight: req.body.weight,
-          CollectionId: req.body.CollectionId,
         };
 
         Product.create(inputData)
           .then((data) => {
-            return res.status(201).json({ data });
+            return res.status(201).json({code:'200', message:'OK', data });
           })
           .catch((error) => {
             return res.status(500).json({ message: error });
@@ -68,24 +66,19 @@ class ProductController {
   static update(req, res, next) {
     try {
       const idProduct = req.params.id;
-      const upload = uploader('PRODUCT_IMAGE').fields([{ name: 'images' }]);
+      const upload = uploader('PRODUCT_IMAGE').fields([{ name: 'image' }]);
       upload(req, res, (err) => {
         if (err) {
           return res.status(500).json({ msg: err });
         }
-        const { images } = req.files;
-        const imagePath = images ? '/' + images[0].filename : null;
+        const { image } = req.files;
+        const imagePath = image ? '/' + image[0].filename : null;
 
         let inputDataUpdate = {
           title: req.body.title,
-          color: req.body.color,
-          size: req.body.size,
-          description: req.body.description,
-          stock: req.body.stock,
-          images: imagePath,
+          status: req.body.status,
+          image: imagePath,
           price: req.body.price,
-          weight: req.body.weight,
-          CollectionId: req.body.CollectionId,
         };
         Product.update(inputDataUpdate, {
           where: {
@@ -94,10 +87,10 @@ class ProductController {
           returning: true,
         })
           .then((data) => {
-            return res.status(200).json({ data });
+            return res.status(200).json({code:'200', message:'OK', data });
           })
           .catch((error) => {
-            return res.status(500).json({ message: error });
+            return res.status(500).json({code: '500', message: error, data: idProduct });
           });
       });
     } catch (error) {
@@ -119,7 +112,7 @@ class ProductController {
           returning: true,
         });
         if (deleteProduct) {
-          return res.status(200).json({ msg: `sucess deleted products ${idProduct}` });
+          return res.status(200).json({code: '200', msg: `sucess deleted products ${idProduct}`,data: deleteProduct });
         }
       }
     } catch (error) {
