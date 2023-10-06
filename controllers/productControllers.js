@@ -9,7 +9,7 @@ class ProductController
     
     let params = {}
     if (status) {
-      params ={status}
+      params = {status}
     }
 
     if ( keyword ) {
@@ -45,7 +45,7 @@ class ProductController
 
         let inputData = {
           title: req.body.title,
-          status: req.body.status,
+          status: !!req.body.status,
           image: imagePath,
           price: req.body.price,
         };
@@ -58,7 +58,7 @@ class ProductController
             return res.status(500).json({ message: error });
           });
       });
-    } catch (error) {
+    } catch ( error ) {
       next(error);
     }
   }
@@ -76,7 +76,7 @@ class ProductController
 
         let inputDataUpdate = {
           title: req.body.title,
-          status: req.body.status,
+          status: !!req.body.status,
           image: imagePath,
           price: req.body.price,
         };
