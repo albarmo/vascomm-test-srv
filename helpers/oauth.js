@@ -3,7 +3,6 @@ const GoogleStrategy = require( 'passport-google-oauth2' ).Strategy;
 const {User} = require( '../models' );
 const {generateAccessToken} = require( './jwt' );
 
-
 passport.use( new GoogleStrategy( {
     clientID: process.env.OAUTH_CLIENT_ID,
     clientSecret: process.env.OAUTH_CLIENT_SECRET,
@@ -13,10 +12,8 @@ passport.use( new GoogleStrategy( {
 },
     async function ( request, accessToken, refreshToken, profile, done )
     {
-        console.log({profile})
         const email = profile.email
         const existingUser = await User.findOne( {where: {email: email}} );
-        console.log(existingUser)
 
         if ( existingUser ) {
             const user = existingUser.dataValues
@@ -31,7 +28,6 @@ passport.use( new GoogleStrategy( {
             const newUser = await User.create( {
                 name: profile.displayName,
                 email: email,
-                phone: '',
                 password: 'test123414!',
                 role: 'customer'
             }, {} )

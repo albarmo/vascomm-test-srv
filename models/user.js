@@ -37,16 +37,6 @@ module.exports = (sequelize, DataTypes) => {
       phone: {
         type: DataTypes.STRING,
         allowNull: true,
-        unique: {
-          argv: true,
-          msg: 'phone number is already in use',
-        },
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'User phone number cannot be empty',
-          },
-        },
       },
       role: {
         type: DataTypes.STRING,

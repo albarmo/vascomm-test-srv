@@ -3,7 +3,8 @@ const UserController = require('../controllers/userControllers');
 const { authorization, authentification } = require('../middleware/Auth');
 
 userRouter.post('/register', UserController.register);
-userRouter.post('/login', UserController.login);
+userRouter.post( '/login', UserController.login );
+userRouter.get('/google', UserController.googleSignIn)
 
 userRouter.use(authentification);
 userRouter.put('/:id', UserController.updateUser);

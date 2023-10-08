@@ -8,11 +8,12 @@ const routes = require('./routes');
 const errorHandler = require( './middleware/errorHandler' );
 const passport = require( 'passport' );
 const session =  require('express-session');
+const isLoggedIn = require( './middleware/isLoggedIn' );
 require( './helpers/oauth' )
 
 
 const App = express();
-App.use(session({ secret: 'cats' }))
+App.use(session({ secret: 'cats', resave:false, saveUninitialized:true, cookie:{secure:false} }))
 App.use(passport.initialize());
 App.use(passport.session());
 
@@ -39,14 +40,14 @@ App.get('/auth/google',
 
 App.get('/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/ok',
+    successRedirect: '/protected',
     failureRedirect: "/oauth/failure"
   })
 );
 
-App.get( '/ok', ( _req, res ) =>
+App.get( '/protected', isLoggedIn, ( _req, res ) =>
 {
-  console.log(_req,res)
+  console.log(_req)
   return res.send('Success login Oauth');
 });
 
