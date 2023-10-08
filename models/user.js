@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       phone: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
         unique: {
           argv: true,
           msg: 'phone number is already in use',

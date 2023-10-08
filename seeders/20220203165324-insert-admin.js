@@ -20,8 +20,8 @@ module.exports = {
          {
           id: uuidv4(),
           name: 'Albar Moerhamsa',
-          email: 'moerhamsa@gmail.com',
-           phone: '085692495133',
+          email: 'customer@vascomm.com',
+          phone: '085692495133',
           role:'customer',
           password: hashPassword( 'Vascomm2023!' ),
           createdAt: new Date(),
